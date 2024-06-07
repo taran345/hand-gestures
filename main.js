@@ -1,5 +1,5 @@
 prediction_1="";
-prediction_2="";
+
 
 Webcam.set({
 height:300,
@@ -21,10 +21,37 @@ classifier=ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/u
 function modelLoaded(){
     console.log("model is loaded");
 }
-function speak(){
-    var synth=window.speechSynthesis;
-    speak_data_1="first predicition is " + prediction_1
-    speak_data_2="second prediction is " + prediction_2
-var utterThis = new SpeechSynthesisUtterance(speak_data_1+ speak_data_2);
-synth.speak=(utterThis);
+function speak() {
+    var synth = window.speechSynthesis;
+    var speak_data = "The Prediction Is "+prediction_1;
+    var utterThis = new SpeechSynthesisUtterance(speak_data);
+    synth.speak(utterThis);
+}
+function check(){
+    img=document.getElementById("captured_image");
+    classifier.classify(img , gotResult)
+}
+function gotResult(error , results){
+if (error){
+    console.log(error);
+} else {
+    console.log(results);
+    document.getElementById("result_gesture_name").innerHTML=results[0].label;
+    prediction_1=results[0].label;
+    speak()
+    if (results[0].label=="amazing")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128076";
+        }
+        if(results[0].label=="victory")
+        {
+         document.getElementById("update_emoji").innerHTML = "&#x270C;";
+        }
+        if(results[0].label=="best")
+        {
+            document.getElementById("update_emoji").innerHTML="&#128077;";
+        }
+}
+
+
 }
